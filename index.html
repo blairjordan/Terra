@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title> terra</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <!--<script src="//connect.soundcloud.com/sdk.js"></script>-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="babylon.js"></script>
+    <script src="Babylon/Cameras/babylon.freeCamera.js"></script>
+    <script src="index.js"></script>
+    <link href="css/main.css" rel="stylesheet" />
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+    <script language="javascript" type="text/javascript">
+    
+    var objects;
+    
+    $(document).ready(function() {
+    
+    	var controlPanel = document.getElementById("controlPanel");
+    	
+    	var panelIsClosed = true;
+    	var aboutIsClosed = true;
+    	
+    	$("#clickableTag").click(function(){
+    		if (panelIsClosed) {
+    		    panelIsClosed = false;
+    		    controlPanel.style.webkitTransform = "translateY(0px)";
+    		    controlPanel.style.transform = "translateY(0px)";
+    		} else {
+    		    panelIsClosed = true;
+    		    controlPanel.style.webkitTransform = "translateY(250px)";
+    		    controlPanel.style.transform = "translateY(250px)";
+    		}
+    	});
+    	
+	    $("#save-object").click(function(){
+	      $.post("saveobject.php",
+	      {
+	      	fname: 		newObjectName,
+	        position_x: newObject.position.x,
+	        position_y: newObject.position.y,
+	        position_z: newObject.position.z,
+	        rotation_x: newObject.rotation.x,
+	        rotation_y: newObject.rotation.y,
+	        scaling_x:  newObject.scaling.x,
+	        scaling_y:  newObject.scaling.y
+	      },
+	      function(data,status){
+	        //alert("Data: " + data + "\nStatus: " + status);
+	      });
+	      
+	      document.getElementById('upload-form').style.display = 'block';
+	      document.getElementById('direction-controls').style.visibility = 'hidden';
+	    });
+	    
+	    event.stopPropagation();
+
+    }); // end document.ready()
+    
+    $(window).load(function() {
+    	
+    	$.get("getobjects.php", function(data) {
+    		objects = data;
+    			
+    		for (var i = 0; i < objects.length; i++) {
+    			renderNewObject( 
+    				"/terra/player-images/" + objects[i].fname, 
+    				objects[i].position_x, 
+    				objects[i].position_y, 
+    				objects[i].position_z, 
+    				objects[i].rotation_x, 
+    				objects[i].rotation_y, 
+    				objects[i].scaling_x, 
+    				objects[i].scaling_y);
+    		}
+    	 }, "json");
+    	 
+    	 //SC.initialize({
+    	 //  client_id: "5a762769326542eda3303436bb0057e1"
+    	 //});
+    	 //SC.stream("/tracks/60544618", {autoPlay: true});
+    	 //event.stopPropagation();
+    	 		
+    });
+<!--
+function startUpload(){
+	document.getElementById('upload-status').style.display 	 = 'none';
+	document.getElementById('upload-progress').style.display = 'block';
+	document.getElementById('upload-form').style.display 	 = 'none';
+    return true;
+}
+
+function stopUpload(success, fname, ratioX, ratioY){
+    var result = '';
+	
+	newObjectName = fname;
+	newObjectRatioX = ratioX;
+	newObjectRatioY = ratioY;
+	
+    if (success == 1) {
+    	document.getElementById('direction-controls').style.visibility = 'visible';
+    }
+    else {
+    	result = '<span class="msg">There was an error during file upload!<\/span><br/><br/>';	
+    	document.getElementById('upload-status').style.display = 'block';
+    	document.getElementById('upload-form').style.display = 'block';
+    	document.getElementById('upload-status').innerHTML = result;
+    }
+
+	document.getElementById('upload-progress').style.display = 'none';
+
+	return true;   
+}
+
+function displayUploadControls() { 
+	document.getElementById('upload-status').style.display = 'block';
+	document.getElementById('upload-form').style.display = 'block';
+	document.getElementById('upload-status').innerHTML = result;
+}
+
+//-->
+</script> 
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        if (BABYLON.Engine.isSupported()) {
+            var canvas = document.getElementById("renderCanvas");
+            var engine = new BABYLON.Engine(canvas, true);
+            var scene = new BABYLON.Scene(engine);
+            scene.gravity = new BABYLON.Vector3(0, -0.4, 0);
+            scene.collisionsEnabled = true; 
+            
+            var camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, 0), scene);
+            camera.checkCollisions = true;
+            camera.applyGravity = true; 
+            //Set the ellipsoid around the camera (e.g. the player's size)
+            camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+            
+			var light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+			light0.diffuse = new BABYLON.Color3(1, 1, 1);
+			light0.specular = new BABYLON.Color3(1, 1, 1);
+			light0.groundColor = new BABYLON.Color3(0, 0, 0);
+				
+            // Skybox
+            var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("skybox/skybox", scene);
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            skybox.material = skyboxMaterial;
+
+            var ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 1, scene, false);
+            var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
+            groundMaterial.diffuseTexture = new BABYLON.Texture("grass.jpg", scene);
+            groundMaterial.diffuseTexture.uScale = 512;
+            groundMaterial.diffuseTexture.vScale = 512;
+            ground.position.y = -2.05;
+            ground.material = groundMaterial;
+            ground.checkCollisions = true;
+            ground.receiveShadows = true;
+            
+            camera.attachControl(canvas);
+
+			var isNewObject = false;
+			var newObject = null;
+            var newObjectName = null;
+            var isMoveUp = false;
+            var isMoveDown = false;
+            var isMoveRight = false;
+            var isMoveLeft = false;
+            var isMoveBack = false;
+            var isMoveForward = false;
+            var isRotateLeft = false;
+            var isRotateX = false;
+            var objectCounter = 1;
+            var newObjectRatioX = null;
+            var newObjectRatioY = null;
+            
+            function renderNewObject(objectFilePath, posX, posY, posZ, rotX, rotY, ratioX, ratioY) {
+            	
+            		newObject = BABYLON.Mesh.CreatePlane(objectFilePath, 5.0, scene);
+            		var newObjectMaterial = new BABYLON.StandardMaterial("texture1", scene);
+            		newObjectMaterial.diffuseTexture = new BABYLON.Texture(objectFilePath, scene);
+            		
+            		newObject.scaling.x = ratioX;
+            		newObject.scaling.y = ratioY;
+            		
+            		newObjectMaterial.diffuseTexture.uScale = 0.998;
+            		newObjectMaterial.diffuseTexture.vScale = 0.998;
+            		         
+            		newObject.position.x = posX;
+            		newObject.position.y = posY;
+            		newObject.position.z = posZ;
+            		newObject.rotation.y = rotY;
+            		rotX ? newObject.rotation.x = rotX : newObject.rotation.x = 0;
+            		newObject.material = newObjectMaterial;
+            		newObjectMaterial.diffuseTexture.hasAlpha = true;
+            		newObjectMaterial.backFaceCulling = false;
+            		newObject.checkCollisions = true;
+            }
+            
+            engine.runRenderLoop(function () {
+            
+            	if (isNewObject) {
+            	
+            		var newObjectPath = '/terra/player-images/' + newObjectName;
+            		
+					renderNewObject(newObjectPath, 1, 0.4, 2, 0, 1, newObjectRatioX, newObjectRatioY);
+					
+					document.getElementById("controlPanel").style.removeProperty('visibility');
+					
+            		isNewObject = false;
+            	}
+            	
+            	if (isMoveUp)    { newObject.position.y = newObject.position.y + 0.05; }
+            	if (isMoveDown)  { newObject.position.y = newObject.position.y - 0.05; }
+            	if (isMoveRight) { newObject.position.x = newObject.position.x + 0.05; }
+            	if (isMoveLeft)  { newObject.position.x = newObject.position.x - 0.05; }
+            	if (isMoveBack)  { newObject.position.z    = newObject.position.z + 0.05; }
+            	if (isMoveForward)  { newObject.position.z = newObject.position.z - 0.05; }
+            	if (isRotateLeft)   { newObject.rotation.y = newObject.rotation.y - 0.025; }
+            	if (isRotateX)   { newObject.rotation.x = newObject.rotation.x - 0.025; }
+            	
+                scene.render();
+                
+            });
+        }   
+    </script>
+    <div id="controlPanel">
+    	<div id="controlsZone">
+			<form id ="uploadimage" action="uploadimage.php" method="POST" enctype="multipart/form-data" target="upload_target" onsubmit="startUpload();">
+				<p>Place new object</p>
+				<div id="upload-status" style="display:none;"></div>
+				<div id="upload-form">	
+                	<label>File path: <input type="file" name="player-image"></label>
+                    <br />
+					<input type="submit" name="submit-button" value="Upload"/>
+				</div>
+				<div id="upload-progress">
+					<p>Uploading image ...</p>
+					<progress></progress>
+				</div>
+			</form>
+			<iframe id="upload_target" name="upload_target" src="#" style="display:none;"></iframe>
+			
+			<div id="direction-controls" style="visibility: hidden;">
+				<button id="up" value="up" onmousedown="isMoveUp = true;" onmouseup="isMoveUp = false;">up</button>
+				<button id="down" value="down" onmousedown="isMoveDown = true;" onmouseup="isMoveDown = false;">down</button>
+				<button id="left" value="left" onmousedown="isMoveLeft = true;" onmouseup="isMoveLeft = false;">left</button>
+				<button id="right" value="right" onmousedown="isMoveRight = true;" onmouseup="isMoveRight = false;">right</button>
+				<button id="right" value="back" onmousedown="isMoveBack = true;" onmouseup="isMoveBack = false;">back</button>
+				<button id="right" value="forward" onmousedown="isMoveForward = true;" onmouseup="isMoveForward = false;">forward</button>
+				<br />
+				<button id="right" value="forward" onmousedown="isRotateLeft = true;" onmouseup="isRotateLeft = false;">rotate</button>
+				<button id="right" value="forward" onmousedown="isRotateX = true;" onmouseup="isRotateX = false;">tip</button>
+				<br />
+				<button id="save-object" value="save-object">Save</button>
+			</div>
+			
+        </div>
+        <div class="tag">Control panel</div>
+        <div class="tag" id="clickableTag"></div>
+    </div>
+</body>
+</html>
+

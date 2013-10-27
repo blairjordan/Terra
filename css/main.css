@@ -1,0 +1,52 @@
+#controlPanel {
+position: absolute;
+height: 250px;
+bottom: 0px;
+width: 500px;
+left: 50%;
+margin-left: -250px;
+z-index: 1;
+transition: transform 0.25s ease-in-out;
+transform: translateY(250px);
+-webkit-transition: -webkit-transform 0.25s ease-in-out;
+-webkit-transform: translateY(250px);
+}
+
+#controlsZone {
+width: 100%;
+height: 100%;
+background-color: #EEEEEE;
+color: #888888;
+padding: 20px;
+border-top-left-radius: 10px 10px;
+border-top-right-radius: 10px 10px;
+}
+
+.tag {
+position: absolute;
+background-color: #EEEEEE;
+height: 40px;
+width: 150px;
+left: 50%;
+padding: 5px;
+color: #888888;
+font-size: 18px;
+margin-left: -75px;
+text-align: center;
+top: -40px;
+border-top-left-radius: 10px 10px;
+border-top-right-radius: 10px 10px;
+}
+
+#clickableTag {
+background-color: transparent;
+}
+
+.tag, #controlsZone {
+	font-family: "Segoe WP", "Segoe UI", "Verdana", "Arial";
+}
+
+#upload-progress {
+	display:none;
+}
+
