@@ -1,45 +1,45 @@
-#controlPanel {
-position: absolute;
-height: 250px;
-bottom: 0px;
-width: 500px;
-left: 50%;
-margin-left: -250px;
-z-index: 1;
-transition: transform 0.25s ease-in-out;
-transform: translateY(250px);
--webkit-transition: -webkit-transform 0.25s ease-in-out;
--webkit-transform: translateY(250px);
+#control-panel {
+	position: absolute;
+	height: 250px;
+	bottom: 0px;
+	width: 500px;
+	left: 50%;
+	margin-left: -250px;
+	z-index: 1;
+	transition: transform 0.25s ease-in-out;
+	transform: translateY(250px);
+	-webkit-transition: -webkit-transform 0.25s ease-in-out;
+	-webkit-transform: translateY(250px);
 }
 
-#controlsZone {
-width: 100%;
-height: 100%;
-background-color: #EEEEEE;
-color: #888888;
-padding: 20px;
-border-top-left-radius: 10px 10px;
-border-top-right-radius: 10px 10px;
+#controls-zone {
+	width: 100%;
+	height: 100%;
+	background-color: #EEEEEE;
+	color: #888888;
+	padding: 20px;
+	border-top-left-radius: 10px 10px;
+	border-top-right-radius: 10px 10px;
 }
 
 .tag {
-position: absolute;
-background-color: #EEEEEE;
-height: 40px;
-width: 150px;
-left: 50%;
-padding: 5px;
-color: #888888;
-font-size: 18px;
-margin-left: -75px;
-text-align: center;
-top: -40px;
-border-top-left-radius: 10px 10px;
-border-top-right-radius: 10px 10px;
+	position: absolute;
+	background-color: #EEEEEE;
+	height: 40px;
+	width: 150px;
+	left: 50%;
+	padding: 5px;
+	color: #888888;
+	font-size: 18px;
+	margin-left: -75px;
+	text-align: center;
+	top: -40px;
+	border-top-left-radius: 10px 10px;
+	border-top-right-radius: 10px 10px;
 }
 
-#clickableTag {
-background-color: transparent;
+#clickable-tag {
+	background-color: transparent;
 }
 
 .tag, #controlsZone {
@@ -50,3 +50,52 @@ background-color: transparent;
 	display:none;
 }
 
+/* Control panel icons */
+
+#left-arrow {
+	width: 33px;
+	height: 34px;
+	background: url('../images/arrows.png') 0 0;
+	position: relative;
+	top: 17px;
+	border: 0;
+}
+#up-arrow {
+	width: 27px;
+	height: 32px;
+	background: url('../images/arrows.png') -33px 0;
+	border: 0;
+}
+#right-arrow { 
+	width: 34px;
+	height: 32px;
+	background: url('../images/arrows.png') -59px 0;
+	position: relative;
+	top: 16px;
+	border: 0;
+}
+#down-arrow { 
+	width: 27px;
+	height: 33px;
+	background: url('../images/arrows.png') -32px -31px;
+	display: block;
+	margin-left: 36px;
+	border: 0;
+}
+#rotate-arrow { 
+	width: 36px;
+	height: 34px;
+	background: url('../images/arrows.png') -59px -32px;
+	margin-left: 20px;
+	position: relative;
+	top: 17px;
+	border: 0;
+}
+#tilt-arrow { 
+	width: 32px;
+	height: 34px;
+	background: url('../images/arrows.png') 0 -33px;
+	position: relative;
+	top: 17px;
+	border: 0;
+}

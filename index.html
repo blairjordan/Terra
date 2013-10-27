@@ -28,14 +28,23 @@
     
     var objects;
     
+    var isMoveUp = false;
+    var isMoveDown = false;
+    var isMoveRight = false;
+    var isMoveLeft = false;
+    var isMoveBack = false;
+    var isMoveForward = false;
+    var isRotateLeft = false;
+    var isRotateX = false;
+    
     $(document).ready(function() {
     
-    	var controlPanel = document.getElementById("controlPanel");
+    	var controlPanel = document.getElementById("control-panel");
     	
     	var panelIsClosed = true;
     	var aboutIsClosed = true;
     	
-    	$("#clickableTag").click(function(){
+    	$("#clickable-tag").click(function(){
     		if (panelIsClosed) {
     		    panelIsClosed = false;
     		    controlPanel.style.webkitTransform = "translateY(0px)";
@@ -65,13 +74,16 @@
 	      
 	      document.getElementById('upload-form').style.display = 'block';
 	      document.getElementById('direction-controls').style.visibility = 'hidden';
+	      
+	      
 	    });
 	    
 	    event.stopPropagation();
+	    
 
     }); // end document.ready()
     
-    $(window).load(function() {
+    $(window).load(function() {    	
     	
     	$.get("getobjects.php", function(data) {
     		objects = data;
@@ -181,14 +193,6 @@ function displayUploadControls() {
 			var isNewObject = false;
 			var newObject = null;
             var newObjectName = null;
-            var isMoveUp = false;
-            var isMoveDown = false;
-            var isMoveRight = false;
-            var isMoveLeft = false;
-            var isMoveBack = false;
-            var isMoveForward = false;
-            var isRotateLeft = false;
-            var isRotateX = false;
             var objectCounter = 1;
             var newObjectRatioX = null;
             var newObjectRatioY = null;
@@ -224,7 +228,7 @@ function displayUploadControls() {
             		
 					renderNewObject(newObjectPath, 1, 0.4, 2, 0, 1, newObjectRatioX, newObjectRatioY);
 					
-					document.getElementById("controlPanel").style.removeProperty('visibility');
+					document.getElementById("control-panel").style.removeProperty('visibility');
 					
             		isNewObject = false;
             	}
@@ -243,8 +247,8 @@ function displayUploadControls() {
             });
         }   
     </script>
-    <div id="controlPanel">
-    	<div id="controlsZone">
+    <div id="control-panel">
+    	<div id="controls-zone">
 			<form id ="uploadimage" action="uploadimage.php" method="POST" enctype="multipart/form-data" target="upload_target" onsubmit="startUpload();">
 				<p>Place new object</p>
 				<div id="upload-status" style="display:none;"></div>
@@ -259,24 +263,27 @@ function displayUploadControls() {
 				</div>
 			</form>
 			<iframe id="upload_target" name="upload_target" src="#" style="display:none;"></iframe>
-			
+				
 			<div id="direction-controls" style="visibility: hidden;">
-				<button id="up" value="up" onmousedown="isMoveUp = true;" onmouseup="isMoveUp = false;">up</button>
-				<button id="down" value="down" onmousedown="isMoveDown = true;" onmouseup="isMoveDown = false;">down</button>
-				<button id="left" value="left" onmousedown="isMoveLeft = true;" onmouseup="isMoveLeft = false;">left</button>
-				<button id="right" value="right" onmousedown="isMoveRight = true;" onmouseup="isMoveRight = false;">right</button>
-				<button id="right" value="back" onmousedown="isMoveBack = true;" onmouseup="isMoveBack = false;">back</button>
-				<button id="right" value="forward" onmousedown="isMoveForward = true;" onmouseup="isMoveForward = false;">forward</button>
+				
+				<button id="left-arrow" onmousedown="isMoveLeft = true;" onmouseup="isMoveLeft = false;"></button>
+				<button id="up-arrow" onmousedown="isMoveBack = true;" onmouseup="isMoveBack = false;"></button>
+				<button id="right-arrow" onmousedown="isMoveRight = true;" onmouseup="isMoveRight = false;"></button>
+				<button id="rotate-arrow" onmousedown="isRotateLeft = true;" onmouseup="isRotateLeft = false;"></button>
+				<button id="tilt-arrow" onmousedown="isRotateX = true;" onmouseup="isRotateX = false;"></button>
+				<button id="down-arrow" onmousedown="isMoveForward = true;" onmouseup="isMoveForward = false;"></button>
 				<br />
-				<button id="right" value="forward" onmousedown="isRotateLeft = true;" onmouseup="isRotateLeft = false;">rotate</button>
-				<button id="right" value="forward" onmousedown="isRotateX = true;" onmouseup="isRotateX = false;">tip</button>
+								
+				<button value="up" onmousedown="isMoveUp = true;" onmouseup="isMoveUp = false;">up</button>
+				<button value="up" onmousedown="isMoveDown = true;" onmouseup="isMoveDown = false;">down</button>
+				
 				<br />
 				<button id="save-object" value="save-object">Save</button>
 			</div>
 			
         </div>
         <div class="tag">Control panel</div>
-        <div class="tag" id="clickableTag"></div>
+        <div class="tag" id="clickable-tag"></div>
     </div>
 </body>
 </html>
